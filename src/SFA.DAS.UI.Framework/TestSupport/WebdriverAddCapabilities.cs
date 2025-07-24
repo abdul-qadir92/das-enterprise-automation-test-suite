@@ -17,7 +17,7 @@ public abstract class WebdriverAddCapabilities(ScenarioContext context)
     {
         var cap = AddBrowserCapabilities(webDriver);
 
-        foreach (var item in cap["chrome"] as Dictionary<string, object>) objectContext.Replace(item.Key, item.Value);
+        //foreach (var item in cap["chrome"] as Dictionary<string, object>) objectContext.Replace(item.Key, item.Value);
     }
 
     protected void AddEdgeCapabilities(IWebDriver webDriver) => AddBrowserCapabilities(webDriver);
@@ -30,9 +30,9 @@ public abstract class WebdriverAddCapabilities(ScenarioContext context)
     {
         var cap = (webDriver as WebDriver).Capabilities;
 
-        objectContext.SetBrowserName(cap["browserName"]);
+        //objectContext.SetBrowserName(cap["browserName"]);
 
-        objectContext.SetBrowserVersion(cap["browserVersion"]);
+        //objectContext.SetBrowserVersion(cap["browserVersion"]);
 
         return cap;
     }
