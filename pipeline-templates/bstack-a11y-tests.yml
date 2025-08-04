@@ -20,8 +20,22 @@ jobs:
         includePreviewVersions: false
 
     - script: |
-        cd $(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITests
+        echo 🔍 Current directory: %CD%
+        echo 📁 Contents of Build.SourcesDirectory:
+        dir "$(Build.SourcesDirectory)"
+
+        echo ----------------------------------------
+        echo 📁 Listing test project directory:
+        dir "$(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITests"
+
+        echo ----------------------------------------
+        cd "$(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITests"
         dotnet --version
+
+        echo 🔧 Running dotnet build...
+        dotnet build
+        
+        echo 🧪 Running dotnet test...
         dotnet test --filter "TestCategory=bstack" --logger "trx;LogFileName=test_results.trx"
       displayName: 'Run filtered UI tests'
       env:
