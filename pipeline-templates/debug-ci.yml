@@ -22,6 +22,7 @@ jobs:
     - script: |
         cd $(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITests
         dotnet --version
+        dotnet build
         echo BROWSERSTACK_AUTOMATION %BROWSERSTACK_AUTOMATION%
         dotnet test --filter "TestCategory=bstack" --logger "trx;LogFileName=test_results.trx"
       displayName: 'Run filtered UI tests'
