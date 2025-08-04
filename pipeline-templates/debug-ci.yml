@@ -1,0 +1,37 @@
+trigger: none
+pr: none
+
+variables:
+- group: BrowserStackSecrets  # your secure env vars
+
+pool:
+  vmImage: 'windows-2019'
+
+jobs:
+- job: Run_UITests
+  displayName: 'Run UI Tests (bstack)'
+  steps:
+    - checkout: self
+  
+    - task: UseDotNet@2
+      displayName: 'Install .NET 8 SDK'
+      inputs:
+        version: '8.x'
+        includePreviewVersions: false
+
+    - script: |
+        $(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITest
+        dotnet --version
+        echo BROWSERSTACK_AUTOMATION %BROWSERSTACK_AUTOMATION%
+        dotnet test --filter "TestCategory=bstack" --logger "trx;LogFileName=test_results.trx"
+      displayName: 'Run filtered UI tests'
+      env:
+        BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
+        BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results'
+      inputs:
+        testResultsFiles: '**/test_results.trx'
+        testRunTitle: 'UI Tests - BStack'
+        failTaskOnFailedTests: true
