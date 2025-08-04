@@ -20,7 +20,7 @@ jobs:
         includePreviewVersions: false
 
     - script: |
-        $(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITest
+        cd $(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITests
         dotnet --version
         dotnet test --filter "TestCategory=bstack" --logger "trx;LogFileName=test_results.trx"
       displayName: 'Run filtered UI tests'
