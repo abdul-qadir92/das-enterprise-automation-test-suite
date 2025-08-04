@@ -22,6 +22,6 @@ CUSTOM_TAG_1: "bstack"
 debug: true
 networkLogs: true
 consoleLogs: info
-accessbility: true
 browserstackAutomation: true
 logLevel: debug
+accessibility: true
