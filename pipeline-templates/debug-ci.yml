@@ -20,7 +20,7 @@ jobs:
         includePreviewVersions: false
 
     - script: |
-        cd $(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITest
+        cd $(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITests
         dotnet --version
         echo BROWSERSTACK_AUTOMATION %BROWSERSTACK_AUTOMATION%
         dotnet test --filter "TestCategory=bstack" --logger "trx;LogFileName=test_results.trx"
