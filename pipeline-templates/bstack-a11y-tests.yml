@@ -31,7 +31,7 @@ jobs:
   - task: CopyFiles@2
     displayName: 'Copy Test Files to Output Directory'
     inputs:
-      SourceFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/files'
+      SourceFolder: '$(System.DefaultWorkingDirectory)/files'
       Contents: '**'
       TargetFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/net8.0/files'
       overWrite: true
