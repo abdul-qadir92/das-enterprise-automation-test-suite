@@ -15,6 +15,11 @@ jobs:
   steps:
   - checkout: self
   
+  - script: |
+      echo "--- Listing contents of the root directory ---"
+      dir $(System.DefaultWorkingDirectory) /s
+    displayName: 'Debug: List all files and directories'
+
   - task: UseDotNet@2
     displayName: 'Install .NET 8 SDK'
     inputs:
