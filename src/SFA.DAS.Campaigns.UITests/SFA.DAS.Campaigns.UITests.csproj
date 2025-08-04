@@ -32,10 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- This new ItemGroup ensures the 'files' directory and its contents are copied to the output folder -->
-    <Content Include="files\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Update="appsettings.Environment.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		<CopyToPublishDirectory>Never</CopyToPublishDirectory>
@@ -44,5 +40,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <!-- This custom target will run after the build and explicitly copy the files -->
+  <Target Name="CopyCustomFiles" AfterTargets="Build">
+    <ItemGroup>
+      <FilesToCopy Include="files\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(OutDir)\files\%(RecursiveDir)" />
+  </Target>
 
 </Project>
