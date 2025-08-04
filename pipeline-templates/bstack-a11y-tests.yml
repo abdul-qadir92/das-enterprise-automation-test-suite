@@ -11,6 +11,8 @@ jobs:
 - job: Run_UITests
   displayName: 'Run UI Tests (bstack)'
   steps:
+    - checkout: self
+  
     - task: UseDotNet@2
       displayName: 'Install .NET 8 SDK'
       inputs:
