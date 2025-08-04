@@ -3,6 +3,8 @@ pr: none
 
 variables:
 - group: BrowserStackSecrets  # your secure env vars
+- name: BuildConfiguration
+  value: 'Debug' # Defines the build configuration for the pipeline
 
 pool:
   vmImage: 'windows-2019'
@@ -11,40 +13,43 @@ jobs:
 - job: Run_UITests
   displayName: 'Run UI Tests (bstack)'
   steps:
-    - checkout: self
+  - checkout: self
   
-    - task: UseDotNet@2
-      displayName: 'Install .NET 8 SDK'
-      inputs:
-        version: '8.x'
-        includePreviewVersions: false
+  - task: UseDotNet@2
+    displayName: 'Install .NET 8 SDK'
+    inputs:
+      version: '8.x'
+      includePreviewVersions: false
 
-    - script: |
-        echo 🔍 Current directory: %CD%
-        echo 📁 Contents of Build.SourcesDirectory:
-        dir "$(Build.SourcesDirectory)"
+  - task: DotNetCoreCLI@2
+    displayName: 'Build the solution'
+    inputs:
+      command: 'build'
+      projects: '**/SFA.DAS.Campaigns.UITests.csproj'
+      arguments: '--configuration $(BuildConfiguration)'
 
-        echo ----------------------------------------
-        echo 📁 Listing test project directory:
-        dir "$(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITests"
+  - task: CopyFiles@2
+    displayName: 'Copy Test Files to Output Directory'
+    inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/files'
+      Contents: '**'
+      TargetFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/net8.0/files'
+      overWrite: true
 
-        echo ----------------------------------------
-        cd "$(Build.SourcesDirectory)\src\SFA.DAS.Campaigns.UITests"
-        dotnet --version
+  - task: DotNetCoreCLI@2
+    displayName: 'Run filtered UI tests'
+    inputs:
+      command: 'test'
+      projects: '**/SFA.DAS.Campaigns.UITests.csproj'
+      arguments: '--no-build --configuration $(BuildConfiguration) --filter "TestCategory=bstack" --logger "trx;LogFileName=test_results.trx"'
+      publishTestResults: false
+    env:
+      BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
+      BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
 
-        echo 🔧 Running dotnet build...
-        dotnet build
-        
-        echo 🧪 Running dotnet test...
-        dotnet test --filter "TestCategory=bstack" --logger "trx;LogFileName=test_results.trx"
-      displayName: 'Run filtered UI tests'
-      env:
-        BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
-        BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
-
-    - task: PublishTestResults@2
-      displayName: 'Publish Test Results'
-      inputs:
-        testResultsFiles: '**/test_results.trx'
-        testRunTitle: 'UI Tests - BStack'
-        failTaskOnFailedTests: true
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results'
+    inputs:
+      testResultsFiles: '**/test_results.trx'
+      testRunTitle: 'UI Tests - BStack'
+      failTaskOnFailedTests: true

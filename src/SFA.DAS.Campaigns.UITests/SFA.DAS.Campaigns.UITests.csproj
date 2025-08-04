@@ -41,12 +41,4 @@
     </None>
   </ItemGroup>
 
-  <!-- This custom target will run after the build and explicitly copy the files -->
-  <Target Name="CopyCustomFiles" AfterTargets="Build">
-    <ItemGroup>
-      <FilesToCopy Include="files\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(OutDir)\files\%(RecursiveDir)" />
-  </Target>
-
 </Project>
