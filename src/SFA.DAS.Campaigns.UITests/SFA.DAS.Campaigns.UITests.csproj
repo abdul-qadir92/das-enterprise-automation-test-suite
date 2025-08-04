@@ -33,9 +33,9 @@
 
   <ItemGroup>
     <!-- This new ItemGroup ensures the 'files' directory and its contents are copied to the output folder -->
-    <None Update="files\**\*.*">
+    <Content Include="files\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Update="appsettings.Environment.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		<CopyToPublishDirectory>Never</CopyToPublishDirectory>
