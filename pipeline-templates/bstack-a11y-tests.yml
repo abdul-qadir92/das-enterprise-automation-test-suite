@@ -15,31 +15,18 @@ jobs:
   steps:
   - checkout: self
   
-  - script: |
-      echo "--- Listing contents of the root directory ---"
-      dir $(System.DefaultWorkingDirectory) /s
-    displayName: 'Debug: List all files and directories'
-
   - task: UseDotNet@2
-    displayName: 'Install .NET 8 SDK'
+    displayName: 'Install .NET 9 SDK'
     inputs:
-      version: '8.x'
-      includePreviewVersions: false
+      version: '9.x'
+      includePreviewVersions: true
 
   - task: DotNetCoreCLI@2
     displayName: 'Build the solution'
     inputs:
       command: 'build'
-      projects: '**/SFA.DAS.Campaigns.UITests.csproj'
+      projects: 'src/**/*.csproj' # This will build all projects in the src folder
       arguments: '--configuration $(BuildConfiguration)'
-
-  - task: CopyFiles@2
-    displayName: 'Copy Test Files to Output Directory'
-    inputs:
-      SourceFolder: '$(System.DefaultWorkingDirectory)/files'
-      Contents: '**'
-      TargetFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/net8.0/files'
-      overWrite: true
 
   - task: DotNetCoreCLI@2
     displayName: 'Run filtered UI tests'
