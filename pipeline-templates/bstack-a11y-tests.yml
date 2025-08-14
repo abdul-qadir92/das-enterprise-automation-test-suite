@@ -25,8 +25,28 @@ jobs:
     displayName: 'Build the solution'
     inputs:
       command: 'build'
-      projects: 'src/**/*.csproj' # This will build all projects in the src folder
+      projects: 'src/**/*.csproj'
       arguments: '--configuration $(BuildConfiguration)'
+
+  # This task finds all config files in the src directory and copies them to the 'files' folder in the test output directory.
+  - task: CopyFiles@2
+    displayName: 'Create and populate the files directory'
+    inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)/src'
+      Contents: |
+        **/*.sql
+        **/appsettings.Config.json
+        **/appsettings.AdminConfig.json
+        **/appsettings.ProviderConfig.json
+        **/appsettings.TimeOutConfig.json
+        **/appsettings.TestExecution.json
+        **/appsettings.NServiceBusConfig.json
+        **/appsettings.BrowserStack.json
+        **/appsettings.ApiFramework.json
+        **/appsettings.Project.json
+      TargetFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/net9.0/files'
+      flattenFolders: true
+      overWrite: true
 
   - task: DotNetCoreCLI@2
     displayName: 'Run filtered UI tests'
