@@ -28,7 +28,7 @@ jobs:
       projects: 'src/**/*.csproj'
       arguments: '--configuration $(BuildConfiguration)'
 
-  # This task finds all config files in the src directory and copies them to the 'files' folder in the test output directory.
+  # This task now copies the config files to the correct location that the tests expect
   - task: CopyFiles@2
     displayName: 'Create and populate the files directory'
     inputs:
@@ -44,7 +44,7 @@ jobs:
         **/appsettings.BrowserStack.json
         **/appsettings.ApiFramework.json
         **/appsettings.Project.json
-      TargetFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/net9.0/files'
+      TargetFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/files'
       flattenFolders: true
       overWrite: true
 
