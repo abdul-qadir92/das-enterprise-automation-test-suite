@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using SFA.DAS.FrameworkHelpers;
 using System;
 using System.Collections.Generic;
@@ -62,7 +62,9 @@ namespace SFA.DAS.ConfigurationBuilder
                 .AddProjectJsonFiles(
                 [
                     "Project"
-                ]);
+                ])
+                // This line is added to read variables from the pipeline
+                .AddEnvironmentVariables();
 
             if (!IsAdoExecution)
             {
