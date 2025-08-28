@@ -58,7 +58,7 @@ jobs:
         Write-Host "Value: $(MailasourApiConfig)"
         Write-Host "----------------------------------------"
     env:
-      MailasourApiConfig: $(MailasourApiConfig)
+      MailasourApiConfig: '$(MailasourApiConfig)'
 
   - task: DotNetCoreCLI@2
     displayName: 'Run filtered UI tests'
@@ -70,7 +70,7 @@ jobs:
     env:
       BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
       BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
-      MailasourApiConfig: $(MailasourApiConfig)
+      MailasourApiConfig: '$(MailasourApiConfig)'
 
   - task: PublishTestResults@2
     displayName: 'Publish Test Results'
