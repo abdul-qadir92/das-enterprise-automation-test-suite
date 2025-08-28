@@ -47,21 +47,16 @@ jobs:
       TargetFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/files'
       flattenFolders: true
       overWrite: true
-      
-# This task replaces the __...__ tokens in your config files with the pipeline variables
-  - task: replacetokens@5
-    displayName: 'Replace tokens in config files'
+
+ # Advanced Debugging Task: This will print all environment variables
+  - task: PowerShell@2
+    displayName: 'Debug - List All Environment Variables'
     inputs:
-      targetFiles: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/files/appsettings.Config.json'
-      encoding: 'auto'
-      writeBOM: true
-      actionOnMissing: 'warn'
-      keepToken: false
-      tokenPrefix: '__'
-      tokenSuffix: '__'
-      useLegacyPattern: false
-      enableTransforms: false
-      enableTelemetry: true
+      targetType: 'inline'
+      script: |
+        Write-Host "--- Listing All Environment Variables ---"
+        Get-ChildItem Env: | Sort-Object Name
+        Write-Host "----------------------------------------"
 
   - task: DotNetCoreCLI@2
     displayName: 'Run filtered UI tests'
@@ -73,6 +68,7 @@ jobs:
     env:
       BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
       BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
+      MailasourApiConfig: $(MailasourApiConfig)
 
   - task: PublishTestResults@2
     displayName: 'Publish Test Results'
