@@ -73,7 +73,6 @@ jobs:
     env:
       BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
       BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
-      MailasourApiConfig: '$(MailasourApiConfig)'
 
   - task: PublishTestResults@2
     displayName: 'Publish Test Results'
