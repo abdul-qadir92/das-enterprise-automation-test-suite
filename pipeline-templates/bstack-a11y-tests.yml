@@ -5,6 +5,8 @@ variables:
 - group: BrowserStackSecrets  # your secure env vars
 - name: BuildConfiguration
   value: 'Debug' # Defines the build configuration for the pipeline
+- name: ResourceEnvironmentName # This variable is added
+  value: 'pp'                  # Or 'at', 'test', etc., as needed
 
 pool:
   vmImage: 'windows-2019'
@@ -69,6 +71,7 @@ jobs:
       BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
       BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
       MailasourApiConfig: $(MailasourApiConfig)
+      ResourceEnvironmentName: $(ResourceEnvironmentName) # Pass the variable to the task
 
   - task: PublishTestResults@2
     displayName: 'Publish Test Results'
