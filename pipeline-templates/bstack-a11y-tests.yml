@@ -47,6 +47,18 @@ jobs:
       TargetFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/files'
       flattenFolders: true
       overWrite: true
+      
+# Debugging Task: This will print the value of the variable
+  - task: PowerShell@2
+    displayName: 'Debug - Check Mailosaur Variable'
+    inputs:
+      targetType: 'inline'
+      script: |
+        Write-Host "--- Checking MailasourApiConfig variable ---"
+        Write-Host "Value: $(MailasourApiConfig)"
+        Write-Host "----------------------------------------"
+    env:
+      MailasourApiConfig: $(MailasourApiConfig)
 
   - task: DotNetCoreCLI@2
     displayName: 'Run filtered UI tests'
