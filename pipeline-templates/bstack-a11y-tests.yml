@@ -48,17 +48,20 @@ jobs:
       flattenFolders: true
       overWrite: true
       
-# Debugging Task: This will print the value of the variable
-  - task: PowerShell@2
-    displayName: 'Debug - Check Mailosaur Variable'
+# This task replaces the __...__ tokens in your config files with the pipeline variables
+  - task: replacetokens@5
+    displayName: 'Replace tokens in config files'
     inputs:
-      targetType: 'inline'
-      script: |
-        Write-Host "--- Checking MailasourApiConfig variable ---"
-        Write-Host "Value: $(MailasourApiConfig)"
-        Write-Host "----------------------------------------"
-    env:
-      MailasourApiConfig: '$(MailasourApiConfig)'
+      targetFiles: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/files/appsettings.Config.json'
+      encoding: 'auto'
+      writeBOM: true
+      actionOnMissing: 'warn'
+      keepToken: false
+      tokenPrefix: '__'
+      tokenSuffix: '__'
+      useLegacyPattern: false
+      enableTransforms: false
+      enableTelemetry: true
 
   - task: DotNetCoreCLI@2
     displayName: 'Run filtered UI tests'
