@@ -1,0 +1,23 @@
+userName: 
+accessKey: 
+platforms:
+  - deviceName: iPhone 13 Pro
+    osVersion: 15
+    browserName: safari
+    deviceOrientation: portrait
+  - deviceName: Samsung Galaxy S23 Ultra
+    osVersion: 13.0
+    browserName: chrome
+    deviceOrientation: portrait
+parallelsPerPlatform: 2    
+browserstackLocal: false
+buildName: bstack-run
+projectName: DAS Campaigns UI Tests
+CUSTOM_TAG_1: "bstack"
+# Use CUSTOM_TAG_<N> and set more build tags as you need.
+#debug: true
+networkLogs: true
+consoleLogs: info
+browserstackAutomation: true
+logLevel: debug
+accessibility: true

@@ -62,7 +62,8 @@ namespace SFA.DAS.ConfigurationBuilder
                 .AddProjectJsonFiles(
                 [
                     "Project"
-                ]);
+                ])
+                .AddEnvironmentVariables();
 
             if (!IsAdoExecution)
             {
