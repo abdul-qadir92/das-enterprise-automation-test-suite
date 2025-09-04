@@ -56,7 +56,6 @@ namespace SFA.DAS.ConfigurationBuilder
                     "TimeOutConfig",
                     "TestExecution",
                     "NServiceBusConfig",
-                    "BrowserStack",
                     "ApiFramework"
                 ])
                 .AddProjectJsonFiles(

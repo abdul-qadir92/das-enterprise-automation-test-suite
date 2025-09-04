@@ -1,0 +1,81 @@
+trigger: none
+pr: none
+
+variables:
+- group: BrowserStackSecrets  # your secure env vars
+- name: BuildConfiguration
+  value: 'Debug' # Defines the build configuration for the pipeline
+- name: ResourceEnvironmentName # This variable is added
+  value: 'pp'                  # Or 'at', 'test', etc., as needed
+
+pool:
+  vmImage: 'windows-2019'
+
+jobs:
+- job: Run_UITests
+  displayName: 'Run UI Tests (bstack)'
+  steps:
+  - checkout: self
+  
+  - task: UseDotNet@2
+    displayName: 'Install .NET 9 SDK'
+    inputs:
+      version: '9.x'
+      includePreviewVersions: true
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build the solution'
+    inputs:
+      command: 'build'
+      projects: 'src/**/*.csproj'
+      arguments: '--configuration $(BuildConfiguration)'
+
+  # This task now copies the config files to the correct location that the tests expect
+  - task: CopyFiles@2
+    displayName: 'Create and populate the files directory'
+    inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)/src'
+      Contents: |
+        **/*.sql
+        **/appsettings.Config.json
+        **/appsettings.AdminConfig.json
+        **/appsettings.ProviderConfig.json
+        **/appsettings.TimeOutConfig.json
+        **/appsettings.TestExecution.json
+        **/appsettings.NServiceBusConfig.json
+        **/appsettings.BrowserStack.json
+        **/appsettings.ApiFramework.json
+        **/appsettings.Project.json
+      TargetFolder: '$(System.DefaultWorkingDirectory)/src/SFA.DAS.Campaigns.UITests/bin/$(BuildConfiguration)/files'
+      flattenFolders: true
+      overWrite: true
+
+ # Advanced Debugging Task: This will print all environment variables
+  - task: PowerShell@2
+    displayName: 'Debug - List All Environment Variables'
+    inputs:
+      targetType: 'inline'
+      script: |
+        Write-Host "--- Listing All Environment Variables ---"
+        Get-ChildItem Env: | Sort-Object Name
+        Write-Host "----------------------------------------"
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Run filtered UI tests'
+    inputs:
+      command: 'test'
+      projects: '**/SFA.DAS.Campaigns.UITests.csproj'
+      arguments: '--no-build --configuration $(BuildConfiguration) --filter "TestCategory=bstack" --logger "trx;LogFileName=test_results.trx"'
+      publishTestResults: false
+    env:
+      BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
+      BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
+      MailasourApiConfig: $(MailasourApiConfig)
+      ResourceEnvironmentName: $(ResourceEnvironmentName) # Pass the variable to the task
+
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results'
+    inputs:
+      testResultsFiles: '**/test_results.trx'
+      testRunTitle: 'UI Tests - BStack'
+      failTaskOnFailedTests: true

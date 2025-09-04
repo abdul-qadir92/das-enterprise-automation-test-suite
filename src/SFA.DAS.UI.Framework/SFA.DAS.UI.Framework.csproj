@@ -29,9 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.BrowserStack.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
     <None Update="appsettings.TimeOutConfig.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
