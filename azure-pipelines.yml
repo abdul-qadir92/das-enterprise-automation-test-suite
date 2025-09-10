@@ -2,7 +2,6 @@ trigger: none
 pr: none
 
 variables:
-- group: BrowserStackSecrets  # your secure env vars
 - name: BuildConfiguration
   value: 'Debug' # Defines the build configuration for the pipeline
 - name: ResourceEnvironmentName # This variable is added
